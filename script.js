@@ -42,6 +42,10 @@ function createList() {
         listItems.push(listItem);
         draggable_list.appendChild(listItem);
     });
+
+addEventListeners();
+
+}
  
 function dragStart() {
     dragStartIndex = +this.closest('li').getAttribute('data-index');
@@ -66,6 +70,7 @@ function dragDrop() {
     this.classList.remove('over');
 }
 
+//Swap list items that are dragged and dropped
 function swapItems(fromIndex, toIndex){
     const itemOne = listItems[fromIndex].querySelector('.draggable');
     const itemTwo = listItems[toIndex].querySelector('.draggable');
@@ -74,13 +79,26 @@ function swapItems(fromIndex, toIndex){
     listItems[toIndex].appendChild(itemOne);
 }
 
+function checkOrder() {
+    listItems.forEach((listItem, index) => {
+        const personName = listItem.querySelector('.draggable').innerText.trim();
+
+        if(personName !== richestPeople[index]) {
+            listItem.classList.add('wrong');
+        } else {
+            listItem.classList.remove('wrong');
+            listItem.classList.add('right');
+        }
+    });
+}
+
 function addEventListeners() {
     const draggables = document.querySelectorAll('.draggable');
-    const dragListItem = document.querySelectorAll('.draggable-list li');
+    const dragListItems = document.querySelectorAll('.draggable-list li');
 
     draggables.forEach(draggable => {
         draggable.addEventListener('dragstart', dragStart);
-    }) 
+    });
 
     dragListItems.forEach(item => {
         item.addEventListener('dragover', dragOver);
@@ -90,4 +108,4 @@ function addEventListeners() {
     });
 }
 
-}
+check.addEventListener('click', checkOrder);
